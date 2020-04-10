@@ -26,12 +26,9 @@ def get_about():
 
 @blueprint.route('{0}{1}/feeds'.format(version, baseUrl), methods=['GET'])
 def get_feeds():
-    print('Start of sys_rargb get_feeds', file=sys.stdout)
-    message = required_query_params(request, ['categories', 'yoghurt'])
+    """ Retrieve RSS objects from RARGB """
+    message = required_query_params(request, ['categories'])
     if message is None:
-        return jsonify({
-            'categories': request.args.get('categories')
-        })
+        
     else:
         return message
-    print('End of sys_rargb get_feeds', file=sys.stdout)
