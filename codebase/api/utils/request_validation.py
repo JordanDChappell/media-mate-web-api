@@ -8,6 +8,6 @@ def required_query_params(request, parameters):
   for expected_param in parameters:
     received_param = request.args.get(expected_param)
     if received_param is None:
-      message = { 'message': 'required query parameter {0} is missing'.format(expected_param) }
+      message = { 'message': 'required query parameter \'{0}\' is missing'.format(expected_param) }
       status_code = 400 # 400 status = bad request, missing parameter
       return message, status_code
