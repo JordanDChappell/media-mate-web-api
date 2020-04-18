@@ -9,12 +9,16 @@ from utils.pymongo_utils import cursor_to_list
 
 # Conditionally import the correct configuration for the running environment
 if os.getenv('FLASK_ENV') == 'development':
-  from dev_config import config
+  from sys_rarbg.dev_config import config
 else:
-  from config import config
+  from sys_rarbg.config import config
 
 # Define a blueprint object, using the flask blueprint function
 blueprint = Blueprint('sys_rarbg', __name__)
+
+# ======================================================== #
+# ====================== Member Data ===================== #
+# ======================================================== #
 
 # Set up MongoDB client
 dbClient = MongoClient()
@@ -36,9 +40,9 @@ about = {
   'environment': os.getenv('FLASK_ENV'),
 }
 
-########################
-###### API ROUTES ######
-########################
+# ======================================================== #
+# ====================== API Routes ====================== #
+# ======================================================== #
 
 # /{version}/sys/rarbg/about
 # URI Parameters: N/A

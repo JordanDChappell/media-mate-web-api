@@ -12,6 +12,7 @@ cryptography = "*"
 pymongo = "*"
 flask-apscheduler = "*"
 apscheduler = "*"
+requests = "*"
 
 [requires]
 python_version = "3.8"

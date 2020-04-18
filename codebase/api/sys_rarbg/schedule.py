@@ -55,7 +55,7 @@ def match_torrents(torrents, filters):
   # Check the torrent for a match on release year and filter
   for torrent in torrents:
       if (str(currentYear) in torrent['title'] or str(currentYear - 1) in torrent['title']):
-        filtersMatched = 0
+        filtersMatched = 0 # Keep track of the amount of matches against the filter list, if the counter matches the length of filter list then it was a match
         for filter in filters:
           if filter in torrent['title']:
             filtersMatched += 1
