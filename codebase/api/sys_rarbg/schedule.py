@@ -1,20 +1,29 @@
-import sys
 import feedparser
 import datetime
 from pymongo import MongoClient
+from utils.logger import get_logger
+
+# ======================================================== #
+# ====================== Member Data ===================== #
+# ======================================================== #
+
+# Set up logger
+logger = get_logger(__name__)
 
 # Set up MongoDB client
 dbClient = MongoClient()
 db = dbClient.flaskdb
 
-########################
-####### API JOBS #######
-########################  
+# ======================================================== #
+# ======================= API Jobs ======================= #
+# ======================================================== #
 
 def read_rarbg_rss():
   '''
   A scheduled job to read the RARBG rss feed and store information about new torrents that fit criteria listed in database
   '''
+  logger.info('Start of read_rarbg_rss job')
+
   # Retrieve the currently stored torrents from database
   torrentCollection = db.rsstorrents
   torrents = torrentCollection.find()
@@ -28,20 +37,24 @@ def read_rarbg_rss():
   rarbgRss = feedparser.parse('http://rarbg.to/rssdd.php?categories={0}'.format(';'.join(categories)))
   torrentsToAdd = match_torrents(rarbgRss['entries'], filters)
 
+  logger.info('{0} new torrents to add to database'.format(len(torrentsToAdd)))
+
   for torrent in torrentsToAdd:
     query = torrentCollection.update_one({'title': torrent['title']}, {'$setOnInsert': {'link': torrent['link']}}, upsert=True)
-    print(query, file=sys.stdout)
+    logger.info(query)
+
+  logger.info('End of read_rarbg_rss job')
 
 # Set up background scheduler to run API background jobs
 def sys_rarbg_schedule(add_job):
   '''
-  add_job is a function of APScheduler, sent from app.py
+  add_job is a callback function of APScheduler, sent from app.py, add any functions that should be scheduled here
   '''
   add_job(func=read_rarbg_rss, trigger="interval", minutes=1)
 
-#######################
-######## UTILS ########
-####################### 
+# ======================================================== #
+# ======================= Functions ====================== #
+# ======================================================== #
 
 def match_torrents(torrents, filters):
   '''

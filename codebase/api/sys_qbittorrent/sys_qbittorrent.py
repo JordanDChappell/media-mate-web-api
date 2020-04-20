@@ -12,7 +12,6 @@ else:
 # Define a blueprint object, using the flask blueprint function
 blueprint = Blueprint('sys_qbittorrent', __name__)
 
-
 # ======================================================== #
 # ====================== Member Data ===================== #
 # ======================================================== #
