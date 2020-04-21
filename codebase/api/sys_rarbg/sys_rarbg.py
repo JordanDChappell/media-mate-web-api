@@ -1,7 +1,5 @@
 import os
-import sys
-import feedparser
-from pymongo import MongoClient
+from utils import db_client
 from flask import Blueprint, request, jsonify
 
 from utils.request_validation import required_query_params
@@ -21,8 +19,7 @@ blueprint = Blueprint('sys_rarbg', __name__)
 # ======================================================== #
 
 # Set up MongoDB client
-dbClient = MongoClient()
-db = dbClient.flaskdb
+db = db_client.flaskdb
 
 # Define API path information
 version = config['version']
@@ -52,6 +49,7 @@ def get_about():
   '''
   Returns information about the API and environment
   '''
+
   return jsonify(about)
 
 # /{version}/sys/rarbg/feeds/categories
